@@ -1,0 +1,29 @@
+{
+  "name": "p5boiler",
+  "version": "1.0.0",
+  "description": "Boilerplate for my p5Projects",
+  "main": "sketch.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "p5boiler"
+  },
+  "author": "Rupertofly",
+  "license": "MIT",
+  "dependencies": {
+    "@code-dot-org/p5.play": "^1.2.0-cdo",
+    "p5": "^0.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.0",
+    "eslint-config-p5js": "^1.0.1",
+    "eslint-config-semistandard": "^12.0.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
