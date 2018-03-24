@@ -1,12 +1,10 @@
 /* eslint no-undef: 0 */
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "setup|draw" }] */
-let barry;
-let wanderAngle;
 let someSprites = [];
 function setup () {
   createCanvas(500, 400);
 
-  for (let index = 0; index < 5; index++) {
+  for (let index = 0; index < 35; index++) {
     someSprites[index] = createSprite(
       random(width - 100) + 50,
       random(height - 100) + 50,
@@ -27,14 +25,21 @@ function draw () {
       spr.position.x = mouseX;
       spr.position.y = mouseY;
       spr.maxSpeed = 0;
+      spr.maxSpeed = 100;
+      spr.width = 50;
+      spr.height = 50;
     } else {
+      spr.width = 30;
+      spr.height = 30;
+
       wander(spr);
     }
   }
   drawSprites();
 }
 function wander (_sprite) {
-  _sprite.maxSpeed = 0.8;
+  _sprite.maxSpeed = 1;
+
   let vW = _sprite.velocity.copy();
   vW.normalize();
   vW.mult(30);
@@ -48,4 +53,18 @@ function wander (_sprite) {
   wanderForce = vW.add(displacement);
   // line(vW2.x, vW2.y, vW2.x + displacement.x * 10, vW2.y + displacement.y * 10);
   _sprite.velocity.add(wanderForce);
+  _sprite.maxSpeed = 100;
+  _sprite.restitution = 1.5;
+  _sprite.bounce(allSprites);
+  _sprite.maxSpeed = 1;
+  if (_sprite.position.x > width - 50) {
+    _sprite.velocity.x -= 0.8;
+  } else if (_sprite.position.x < 50) {
+    _sprite.velocity.x += 0.8;
+  } else if (_sprite.position.y > height - 50) {
+    _sprite.velocity.y -= 0.8;
+  } else if (_sprite.position.y < 50) {
+    _sprite.velocity.y -= 0.8;
+  } else {
+  }
 }

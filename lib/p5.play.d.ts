@@ -1,9 +1,10 @@
 ///<reference path="p5.d.ts" />
 ///<reference path="p5.play.js" />
-declare class Group { }
-//Functions
-declare class Sprite {
-    constructor(pInst: any, _x: number, _y: number, _w: number, _h: number)
+declare namespace p5 {
+  declare class Group {}
+  //Functions
+  declare class Sprite {
+    constructor(pInst: any, _x: number, _y: number, _w: number, _h: number);
     color(): void;
     createVector(): void;
     random(): void;
@@ -56,8 +57,7 @@ declare class Sprite {
     height: number;
     removed: boolean;
     shapeColor: p5.Color;
-
-
+  }
 }
 declare function allSprites(): Group;
 declare function createSprite(
@@ -73,7 +73,6 @@ declare function drawSprites(group: Group): void;
 declare function drawSprite(sprite: Sprite): void;
 declare function loadAnimation(sprite: Sprite): Animation;
 declare function loadSpriteSheet(): SpriteSheet;
-declare function animation(anim: Animation, x: number, y: number)
+declare function animation(anim: Animation, x: number, y: number);
 
 //Utils functions
-declare function 
