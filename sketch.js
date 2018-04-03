@@ -1,11 +1,11 @@
 /* eslint no-undef: 0 */
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "setup|draw" }] */
-function setup() {
+function setup () {
   createCanvas(windowWidth, windowHeight);
 }
-function draw() {
+function draw () {
   background(55);
   if (mouseIsPressed) {
-    ellipse(mouseX, mouseY, 30, 30)
+    ellipse(mouseX, mouseY, 30, 30);
   }
 }
