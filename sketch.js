@@ -41,7 +41,7 @@ function setup () {
   // recordSetup();
 }
 function draw () {
-  background(Pallete.neutrals[1].hex);
+  background(getC(hues.neutrals, shades.dark).hex);
   if (mouseIsPressed) {
     ellipse(mouseX, mouseY, 30, 30);
   }
