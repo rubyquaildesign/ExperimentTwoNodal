@@ -35,13 +35,13 @@ function recordSetup () {
 }
 // #endregion
 function preload () {}
-
+let canvas;
 function setup () {
-  createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(300, 500);
   // recordSetup();
 }
 function draw () {
-  background(getC(hues.neutrals, shades.dark).hex);
+  background(getC(hues.neutrals, 1).hex);
   if (mouseIsPressed) {
     ellipse(mouseX, mouseY, 30, 30);
   }
