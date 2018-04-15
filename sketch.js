@@ -36,8 +36,10 @@ function recordSetup () {
 // #endregion
 function preload () {}
 let canvas;
+
 function setup () {
   canvas = createCanvas(300, 500);
+
   // recordSetup();
 }
 function draw () {

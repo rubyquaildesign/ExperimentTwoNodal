@@ -2,5 +2,5 @@
   "compilerOptions": {
     "target": "ES6"
   },
-  "include": ["sketch.js", "lib/**/*"]
+  "include": ["sketch.js", "lib/**/*", "node_modules/firebase/**/*"]
 }
