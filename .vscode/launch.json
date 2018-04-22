@@ -9,10 +9,8 @@
       "request": "launch",
       "name": "Launch Chrome file",
       "url": "file://${workspaceFolder}/index.html",
-      "webRoot": "${workspaceFolder}"
-      "skipFiles": [
-        "lib/p5.*"
-      ]
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["lib/p5.*"]
     },
     {
       "type": "chrome",
@@ -26,6 +24,13 @@
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against GitHub Pages",
+      "url": "http://rupertofly.github.io/${workspaceFolderBasename}",
       "webRoot": "${workspaceFolder}"
     }
   ]
