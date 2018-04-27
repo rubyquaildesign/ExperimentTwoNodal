@@ -17,21 +17,24 @@
       "request": "attach",
       "name": "Attach to Chrome",
       "port": 9222,
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["lib/p5.*"]
     },
     {
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["lib/p5.*"]
     },
     {
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome against GitHub Pages",
       "url": "http://rupertofly.github.io/${workspaceFolderBasename}",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["lib/p5.*"]
     }
   ]
 }
