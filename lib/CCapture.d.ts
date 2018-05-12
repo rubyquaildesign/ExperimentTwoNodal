@@ -6,4 +6,6 @@ class CCapture {
   capture(canvas: any): void;
   stop(): void;
 }
-declare Object.entries(Object): [String,any];
+declare interface Object {
+  entries(): [String, any];
+}
