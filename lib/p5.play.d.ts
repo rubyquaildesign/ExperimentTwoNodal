@@ -661,7 +661,7 @@ declare class Sprite {
      * @type {p5.Vector}
      * @undefined
      */
-  constructor( x: number, y: number, width: number, height: number )
+  constructor(p5: any, x: number, y: number, width: number, height: number )
   public position: p5.Vector;
 
   /**
