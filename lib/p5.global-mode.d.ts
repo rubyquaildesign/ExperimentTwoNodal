@@ -6142,7 +6142,7 @@ declare function removeElements(): void;
  *   @param [html] inner HTML for element created
  *   @return pointer to p5.Element holding created node
  */
-declare function createDiv(html?: string): object|p5.Element;
+declare function createDiv(html?: string): p5.Element;
 
 /**
  *   Creates a <p></p> element in the DOM with given 
@@ -6153,7 +6153,7 @@ declare function createDiv(html?: string): object|p5.Element;
  *   @param [html] inner HTML for element created
  *   @return pointer to p5.Element holding created node
  */
-declare function createP(html?: string): object|p5.Element;
+declare function createP(html?: string): p5.Element;
 
 /**
  *   Creates a <span></span> element in the DOM with 
@@ -6163,7 +6163,7 @@ declare function createP(html?: string): object|p5.Element;
  *   @param [html] inner HTML for element created
  *   @return pointer to p5.Element holding created node
  */
-declare function createSpan(html?: string): object|p5.Element;
+declare function createSpan(html?: string): p5.Element;
 
 /**
  *   Creates an <img> element in the DOM with given src 
@@ -6177,7 +6177,7 @@ declare function createSpan(html?: string): object|p5.Element;
  *   once image data is loaded
  *   @return pointer to p5.Element holding created node
  */
-declare function createImg(src: string, alt?: string, successCallback?: Function): object|p5.Element;
+declare function createImg(src: string, alt?: string, successCallback?: Function): p5.Element;
 
 /**
  *   Creates an <a></a> element in the DOM for 
@@ -6191,7 +6191,7 @@ declare function createImg(src: string, alt?: string, successCallback?: Function
  *   could be _blank, _self, _parent, _top.
  *   @return pointer to p5.Element holding created node
  */
-declare function createA(href: string, html: string, target?: string): object|p5.Element;
+declare function createA(href: string, html: string, target?: string): p5.Element;
 
 /**
  *   Creates a slider <input></input> element in the 
@@ -6208,7 +6208,7 @@ declare function createA(href: string, html: string, target?: string): object|p5
  *   value)
  *   @return pointer to p5.Element holding created node
  */
-declare function createSlider(min: number, max: number, value?: number, step?: number): object|p5.Element;
+declare function createSlider(min: number, max: number, value?: number, step?: number): p5.Element;
 
 /**
  *   Creates a <button></button> element in the DOM. 
@@ -6221,7 +6221,7 @@ declare function createSlider(min: number, max: number, value?: number, step?: n
  *   @param [value] value of the button
  *   @return pointer to p5.Element holding created node
  */
-declare function createButton(label: string, value?: string): object|p5.Element;
+declare function createButton(label: string, value?: string): p5.Element;
 
 /**
  *   Creates a checkbox <input></input> element in the 
@@ -6233,7 +6233,7 @@ declare function createButton(label: string, value?: string): object|p5.Element;
  *   true, unchecked is false
  *   @return pointer to p5.Element holding created node
  */
-declare function createCheckbox(label?: string, value?: boolean): object|p5.Element;
+declare function createCheckbox(label?: string, value?: boolean): p5.Element;
 
 /**
  *   Creates a dropdown menu <select></select> element 
@@ -6267,7 +6267,7 @@ declare function createSelect(existing: object): p5.Element;
  *   and input field respectively
  *   @return pointer to p5.Element holding created node
  */
-declare function createRadio(divId?: string): object|p5.Element;
+declare function createRadio(divId?: string): p5.Element;
 
 /**
  *   Creates an <input></input> element in the DOM for 
@@ -6280,7 +6280,7 @@ declare function createRadio(divId?: string): object|p5.Element;
  *   Defaults to text
  *   @return pointer to p5.Element holding created node
  */
-declare function createInput(value?: string, type?: string): object|p5.Element;
+declare function createInput(value?: string, type?: string): p5.Element;
 
 /**
  *   Creates an <input></input> element in the DOM of 
@@ -6294,7 +6294,7 @@ declare function createInput(value?: string, type?: string): object|p5.Element;
  *   @return pointer to p5.Element holding created DOM 
  *   element
  */
-declare function createFileInput(callback?: Function, multiple?: string): object|p5.Element;
+declare function createFileInput(callback?: Function, multiple?: string): p5.Element;
 
 /**
  *   Creates an HTML5 <video> element in the DOM for 
@@ -6368,7 +6368,7 @@ declare function createAudio(src?: string|string[], callback?: object): p5.Media
  *   has loaded
  *   @return capture video p5.Element
  */
-declare function createCapture(type: string|any|object, callback: Function): object|p5.Element;
+declare function createCapture(type: string|any|object, callback: Function): p5.Element;
 
 /**
  *   Creates element with given tag in the DOM with 
@@ -6380,7 +6380,7 @@ declare function createCapture(type: string|any|object, callback: Function): obj
  *   the element
  *   @return pointer to p5.Element holding created node
  */
-declare function createElement(tag: string, content?: string): object|p5.Element;
+declare function createElement(tag: string, content?: string): p5.Element;
 
 // Properties from p5.sound
 

@@ -6,10 +6,11 @@ interface cEnum extends Array<string> {
   b: string;
   p: string;
 }
-interface Actor {
+declare interface Actor {
   constructor(p5: any): void;
   s: Sprite;
   parentNode: ServerNode;
+  pId: string;
   id: string;
   name: string;
   type: number;
@@ -17,7 +18,7 @@ interface Actor {
   sendMessage(target: Actor, type: number): void;
   postMessage(type: number): void;
 }
-interface ServerNode {
+declare interface ServerNode {
   s: Sprite;
   id: string;
   blockedTypes: number[];
@@ -26,17 +27,24 @@ interface ServerNode {
   content: Message[];
   selected: boolean;
 }
-interface Message {
+declare interface Message {
   s: Sprite;
   id: string;
   direct: boolean;
   source: Actor;
+  sId: string;
   sourceType: number;
   target: Actor | ServerNode;
+  tId: string;
   targetType: number;
   parent: ServerNode;
+  pId: string;
   destroyed: boolean;
 }
-interface Element {
-  option: () => void;
+declare namespace p5 {
+  interface Element {
+    option: (a: any, b: any) => void;
+    parent: (a: any) => void;
+  }
 }
+declare function createInput(...args: any): p5.Element;
