@@ -637,9 +637,9 @@ declare class p5play {
    * @undefined
    */
   public bounce: any;
-
+  public createSprite(x: number, y:number, width: number, height:number): Sprite;
 }
-
+declare function createSprite(x: number, y: number, width: number, height: number): Sprite;
 
   /**
    * A Sprite is the main building block of p5.play:

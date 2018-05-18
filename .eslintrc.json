@@ -7,7 +7,6 @@
       {
         "varsIgnorePattern": "setup|draw|preload|p5Canvas0"
       }
-    ],
-    "space-in-parens": ["error", "always"]
+    ]
   }
 }

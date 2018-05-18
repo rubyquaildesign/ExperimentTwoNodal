@@ -6105,7 +6105,7 @@ declare function soundFormats(formats?: string): void;
  *   to search within
  *   @return p5.Element containing node found
  */
-declare function select(name: string, container?: string): object|p5.Element|null;
+declare function select(name: string, container?: string): p5.Element|null;
 
 /**
  *   Searches the page for elements with the given 

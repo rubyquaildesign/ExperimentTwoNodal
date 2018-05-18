@@ -6825,7 +6825,7 @@ declare namespace p5 {
      *   @param [child] the ID, DOM node, or p5.Element to 
      *   add to the current element
      */
-    child(child?: string|object|p5.Element): p5.Element
+    child(child?: string|object|p5.Element): p5.Element|p5.Element[]
     
     /**
      *   Centers a p5 Element either vertically, 

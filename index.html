@@ -33,15 +33,24 @@
 
 <body>
     <div class="container-fluid">
-        <p class="h1">Testing Stuff</div>
+        <p class="h1">Rupert's Second Honours Experiment</div>
     <div class="row justify-content-center" style="height: 720px;">
         <div class="col-lg-10">
             <div class="row" id="canvasContainer" style="height: 100%"></div>
             <div class="row justify-content-start">
-                <div id="messageBox" class="col-md-4 border m-2">
+                <div id="messageBox" class="col-md-3 border m-2">
                     <p class="h3">Info</p>
+                    <div class="container" id="infoBox">
+                        <div id="infoC"></div>
+                    </div>
                 </div>
-                <div class="col-md-4 border m-2" id="addBox">
+                <div class="col-md-4 border m-2" id="actionBox">
+                    <p class="h3">Actions</p>
+                    <p class="body" style="color: red" id='actionError'></p>
+                    <div class="container" id="aBox">
+                    </div>
+                </div>
+                <div class="col-md-4 border m-2 p-2" id="addBox">
                     <p class="h3">Add Actor</p>
                     <div id="colourChooser">
                     </div>
