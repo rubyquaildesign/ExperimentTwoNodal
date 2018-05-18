@@ -97,7 +97,6 @@ colourEnum.g = colourEnum[3];
 colourEnum.b = colourEnum[4];
 colourEnum.p = colourEnum[5];
 
-M_ENUM;
 // endregion
 
 /** Class representing an Actor */
