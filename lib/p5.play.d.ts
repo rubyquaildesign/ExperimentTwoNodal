@@ -1004,7 +1004,8 @@ declare class Sprite {
    * @undefined
    */
   public setCollider( type: string, offsetX: number, offsetY: number, width: number, height: number ): void;
-
+  public setCollider( type: string, offsetX: number, offsetY: number, radius: number ): void;
+  public onMousePressed(): void;
   /**
    * Returns a the bounding box of the current image
    * @method getBoundingBox

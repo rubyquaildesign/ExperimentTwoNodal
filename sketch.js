@@ -192,7 +192,6 @@ class ServerNode {
    * @param {p5} p5
    * @param {number} mainType
    * @param {number[]} blockedTypes
-   * @param {string} [id]
    * @memberof ServerNode
    */
 
@@ -311,7 +310,7 @@ class ServerNode {
     this.rotation += TWO_PI / 600;
     let ang = 0;
 
-    for (let [i, x] of this.members.entries()) {
+    for (let x of this.members) {
       let pos = createVector(0, -100);
       pos.rotate(ang);
       pos.rotate(this.rotation);
@@ -325,7 +324,7 @@ class ServerNode {
 }
 
 class Message {
-  constructor(p5, sourceId, targetId, directed, id) {
+  constructor(p5, sourceId, targetId, directed) {
     if (arguments.length === 2) {
       this.id = arguments[1];
 
@@ -358,7 +357,7 @@ class Message {
   }
   init() {
     this.source = actorList.filter(a => this.sId === a.id)[0];
-    if (this.direct) this.target = actorList.filter(a => this.tId === a.id)[0];
+    if (!this.direct) this.target = actorList.filter(a => this.tId === a.id)[0];
     else this.target = nodeList.filter(a => this.tId === a.id)[0];
     this.s.limitSpeed(0.4);
     this.source = actorList.filter(a => this.sId === a.id)[0];
@@ -455,7 +454,7 @@ var config = {
   storageBucket: "awesomesaucerupert.appspot.com",
   messagingSenderId: "465094389233"
 };
-
+// region Firebase
 firebase.initializeApp(config);
 let d = firebase.database();
 let database = firebase.database().ref("exerciseTwo");
@@ -468,9 +467,7 @@ p5.prototype.getFirebaseData = function() {
   database.once("value", snapshot => {
     let d = snapshot.val();
     for (let prop in d) {
-      for (let prop in d) {
-        ret[prop] = d[prop];
-      }
+      ret[prop] = d[prop];
     }
     self._decrementPreload();
   });
@@ -482,9 +479,11 @@ function preload() {
   // @ts-ignore
   importedData = getFirebaseData();
 }
+// endregion
 function postMsg(type) {
   /** @type {Actor} */
-  let s = selected;
+  let s;
+  if ("type" in selected) s = selected;
   if (s.timeSincePost < 0 * 60) {
     select("#actionError").html("Please Wait 5 Seconds between Posts");
     return;
@@ -558,7 +557,7 @@ function mousePressed() {
 function setupAddBox() {
   // @ts-ignore
   // @ts-nocheck
-  let error = createP("")
+  createP("")
     .id("createError")
     .class("body")
     .parent("#addBox")
@@ -589,7 +588,7 @@ function setupAddBox() {
     .class("btn btn-dark");
   createBut.mousePressed(() => {
     let x = choiceRadio.value();
-    let y = name.value();
+    let y = String(name.value());
     if (selected === null) {
       select("#createError").html("You need to select a Node");
       return;
@@ -626,7 +625,9 @@ function getSomePointsYall(noPoints, noRelax) {
   /**
    * @type {[number,number][]}
    */
-  let points = d3.range(noPoints).map(i => {
+  // @ts-ignore
+  let points = d3.range(noPoints).map(() => {
+    /** @type {[number,number]} */
     return [random() * width - 100, random() * height - 100];
   });
   let vor = d3.voronoi().size([width - 100, height - 100]);
@@ -667,6 +668,7 @@ function updateBoxes() {
       .id("PrimaryColour");
     createDiv(" ")
       .style("border-radius", "50%")
+
       .style("background-color", colourEnum[selected.type])
       .style("width", "15px")
       .style("height", "15px")
@@ -772,6 +774,7 @@ function updateSelected(obj) {
   updateBoxes();
 }
 function prepActions() {
+  if (!("type" in selected)) throw selected;
   let actions = [
     (selected.type + 6 - 1) % 6,
     selected.type,
@@ -815,16 +818,19 @@ function prepActions() {
   });
 }
 function sendMessage(sourceCol) {
+  if (!("type" in selected)) throw sendMessage;
   if (selected.timeSincePost < 5 * 60) {
     select("#actionError").html("Please Wait 5 Seconds between Posts");
     return;
   }
   tripUp = false;
+
   selected.timeSincePost = 0;
   mode = TARGET;
   selectedColor = sourceCol;
 }
 function confirmSend(target) {
+  if (!("type" in selected)) throw confirmSend;
   if (target === selected) {
     select("#actionError").html("it can't send a message to itself");
     updateSelected();
@@ -843,6 +849,7 @@ function confirmSend(target) {
   updateSelected();
 }
 function confirmMove(target) {
+  if (!("type" in selected)) throw confirmSend;
   if (target === selected.parent) {
     select("#actionError").html("You can't move a Node to itself");
     updateSelected();

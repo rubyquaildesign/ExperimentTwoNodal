@@ -5,7 +5,7 @@
     "no-unused-vars": [
       "error",
       {
-        "varsIgnorePattern": "setup|draw|preload|p5Canvas0"
+        "varsIgnorePattern": "setup|draw|preload|p5Canvas0|mousePressed"
       }
     ]
   }

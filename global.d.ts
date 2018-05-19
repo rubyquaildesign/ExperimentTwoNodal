@@ -46,6 +46,7 @@ declare namespace p5 {
   interface Element {
     option: (a: any, b: any) => void;
     parent: (a: any) => void;
+    public style(att: string, val: string): p5.Element;
   }
   function _decrementPreload(): void;
 }
@@ -53,3 +54,8 @@ declare interface p5 {
   _decrementPreload(): void;
 }
 declare function createInput(...args: any): p5.Element;
+declare function drawSprite(sprite: Sprite): void;
+
+declare interface HTMLCanvasElement {
+  public parent(p: string): void;
+}
