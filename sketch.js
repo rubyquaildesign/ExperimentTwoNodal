@@ -135,6 +135,15 @@ class Actor {
       this.id = hash(
         Number(new Date().getTime() + Math.floor(random() * 200)).toString()
       );
+      while (usedHashes.includes(this.id)) {
+        this.id = hash(
+          Number(new Date().getTime() + Math.floor(random() * 200)).toString()
+        );
+      }
+      usedHashes.push(this.id);
+      d.ref("exerciseTwo").update({
+        "/usedHashes": usedHashes
+      });
       this.pId = pId;
 
       this.type = colour;
@@ -144,6 +153,7 @@ class Actor {
     this.parent = nodeList.filter(value => {
       return value.id === this.pId;
     })[0];
+    this.parent.members.push(this);
     /** @type {Sprite} */
     this.s = createSprite(0, 0, 40, 40);
     this.s.mouseActive = true;
@@ -166,6 +176,7 @@ class Actor {
       textSize(12);
       textAlign(CENTER, CENTER);
       text(this.name.substring(0, 2), 0, 0);
+      if (!this.parent.members.includes(this)) this.parent.members.push(this);
     };
 
     this.s.onMousePressed = () => {
@@ -196,6 +207,7 @@ class ServerNode {
    */
 
   constructor(p5, mainType, blockedTypes) {
+    this.evaluateOn20 = false;
     if (arguments.length === 2) {
       /** @type {String} */
       this.id = arguments[1];
@@ -203,20 +215,37 @@ class ServerNode {
         return this.id === d.id;
       })[0];
       Object.assign(this, p);
+      if ("blockedTypes" in p) {
+        let bt = [];
+        for (let y of p.blockedTypes.vals()) bt.push(y);
+        this.blockedTypes = bt;
+      } else this.blockedTypes = [];
     } else {
       this.mainType = mainType;
-      this.evaluateOn20 = false;
+
       /** @type {number[]} */
       this.blockedTypes = blockedTypes;
       this.id = hash(
         Number(new Date().getTime() + Math.floor(random() * 200)).toString()
       );
+      while (usedHashes.includes(this.id)) {
+        this.id = hash(
+          Number(new Date().getTime() + Math.floor(random() * 200)).toString()
+        );
+      }
+      usedHashes.push(this.id);
+      d.ref("exerciseTwo").update({
+        "/usedHashes": usedHashes
+      });
       let pickNew = false;
       while (!pickNew) {
         this.name = random(CITY_NAMES);
         if (!usedNames.includes(this.name)) pickNew = true;
       }
       usedNames.push(this.name);
+      d.ref("exerciseTwo").update({
+        usedNames: usedNames
+      });
     }
     this.s = createSprite(0, 0, 100, 100);
     /** @type {Actor[]} */
@@ -281,6 +310,7 @@ class ServerNode {
         let highestP = max(cCounts);
         let mostPop = cCounts.findIndex(d => d === highestP);
         this.mainType = mostPop;
+
         if (this.blockedTypes.includes((mostPop + 6 + 1) % 6)) {
           if (random() > 0.4)
             this.blockedTypes.splice(
@@ -301,7 +331,10 @@ class ServerNode {
         } else if (!this.blockedTypes.includes((leastPop + 6 - 1) % 6)) {
           if (random() > 0.4) this.blockedTypes.push((leastPop + 6 - 1) % 6);
         }
-
+        d.ref("exerciseTwo/nodeList/" + this.id).update({
+          mainType: this.mainType,
+          blockedTypes: this.blockedTypes
+        });
         this.evaluateOn20 = false;
       }
     }
@@ -335,6 +368,15 @@ class Message {
       this.id = hash(
         Number(new Date().getTime() + Math.floor(random() * 200)).toString()
       );
+      while (usedHashes.includes(this.id)) {
+        this.id = hash(
+          Number(new Date().getTime() + Math.floor(random() * 200)).toString()
+        );
+      }
+      usedHashes.push(this.id);
+      d.ref("exerciseTwo").update({
+        "/usedHashes": usedHashes
+      });
       this.destroyed = false;
       this.direct = directed;
       this.sId = sourceId;
@@ -350,9 +392,9 @@ class Message {
     this.s.draw = () => {
       noStroke();
       fill(colourEnum[this.sourceType]);
-      ellipse(0, 0, 7);
+      ellipse(0, 0, 10);
       fill(colourEnum[this.targetType]);
-      ellipse(0, 0, 4, 4);
+      ellipse(0, 0, 8, 8);
     };
   }
   init() {
@@ -397,6 +439,9 @@ class Message {
         if ("blockedTypes" in this.target) {
           if (this.target.blockedTypes.includes(this.targetType)) {
             this.destroyed = true;
+            d
+              .ref("exerciseTwo/messageList/" + this.id)
+              .update({ destroyed: true });
             let i = messageList.indexOf(this);
             messageList.splice(i, 1);
             return;
@@ -428,16 +473,21 @@ class Message {
     drawSprite(this.s);
   }
 }
-
-// region global Variables
+let usedHashes = ["000001", "000002", "000003"];
+// #region global Variables
 let actorList = [];
 
-let usedNames = [];
+let usedNames = [
+  "Tom from MySpace",
+  "Metropolis",
+  "West Camden",
+  "East Camden"
+];
 let messageList = [];
 /** @type {ServerNode[]} */
 let nodeList = [];
 let selectedColor = 0;
-// endregion
+// #endregion
 /** @type {p5.Element} */
 let choiceRadio;
 
@@ -445,7 +495,7 @@ let mode;
 /** @type {Actor|ServerNode|null} */
 let selected = null;
 let selectedServerNodeElt;
-// region fireBaseSetupStuff
+// #region fireBaseSetupStuff
 var config = {
   apiKey: "AIzaSyCZh7bDhcHYesPc0FeKxriL7EZ2Kopk2us",
   authDomain: "awesomesaucerupert.firebaseapp.com",
@@ -454,7 +504,7 @@ var config = {
   storageBucket: "awesomesaucerupert.appspot.com",
   messagingSenderId: "465094389233"
 };
-// region Firebase
+
 firebase.initializeApp(config);
 let d = firebase.database();
 let database = firebase.database().ref("exerciseTwo");
@@ -479,7 +529,7 @@ function preload() {
   // @ts-ignore
   importedData = getFirebaseData();
 }
-// endregion
+// #endregion
 function postMsg(type) {
   /** @type {Actor} */
   let s;
@@ -494,10 +544,50 @@ function postMsg(type) {
   m.added = true;
   m.init();
   messageList.push(m);
+  d.ref("exerciseTwo/messageList/" + m.id).set({
+    id: m.id,
+    sourceType: m.sourceType,
+    targetType: m.targetType,
+    sId: m.source.id,
+    tId: m.target.id,
+    direct: false
+  });
   s.timeSincePost = 0;
 }
 // endregion
 function setup() {
+  d.ref("exerciseTwo").update({
+    usedHashes: ["000001", "000002", "000003"],
+    usedNames: usedNames,
+    nodeList: {
+      "000001": {
+        id: "000001",
+        name: "Metropolis",
+        mainType: 0,
+        blockedTypes: []
+      },
+      "000002": {
+        id: "000002",
+        name: "East Camden",
+        mainType: 1,
+        blockedTypes: [3, 4, 5]
+      },
+      "000003": {
+        id: "000003",
+        name: "West Camden",
+        mainType: 4,
+        blockedTypes: [0, 1, 2]
+      }
+    },
+    actorList: {
+      "000004": {
+        id: "000004",
+        name: "Tom from Myspace",
+        pId: "000001",
+        type: 4
+      }
+    }
+  });
   mode = ACTOR_SELECT;
   console.log(importedData);
   let wh = document.getElementById("canvasContainer");
@@ -541,11 +631,11 @@ function draw() {
     n.members = actorList.filter(a => n.id === a.pId);
     n.update();
   }
-  for (let m of messageList) {
-    m.update();
-  }
   for (let a of actorList) {
     a.s.display();
+  }
+  for (let m of messageList) {
+    m.update();
   }
 }
 let tripUp = false;
@@ -612,6 +702,9 @@ function setupAddBox() {
     let colo = colourEnum.indexOf(colourEnum[x[0]]);
     let a = new Actor(this, colo, selected.id, y);
     usedNames.push(y);
+    d.ref("exerciseTwo").update({
+      usedNames: usedNames
+    });
     d.ref("exerciseTwo/actorList/" + a.id).set({
       id: a.id,
       name: a.name,
@@ -846,6 +939,14 @@ function confirmSend(target) {
   m.direct = true;
   m.init();
   messageList.push(m);
+  d.ref("exerciseTwo/messageList/" + m.id).set({
+    id: m.id,
+    sourceType: m.sourceType,
+    targetType: m.targetType,
+    sId: m.source.id,
+    tId: m.recip.id,
+    direct: true
+  });
   updateSelected();
 }
 function confirmMove(target) {
@@ -864,4 +965,37 @@ function confirmMove(target) {
   selected.parent = target;
   selected.pId = target.id;
   updateSelected();
+}
+function serverNodeAdder() {
+  let isReadyForNode = true;
+  for (let node of nodeList) {
+    if (node.members.length < 3) isReadyForNode = false;
+  }
+  if (!isReadyForNode) return null;
+  let colourCount = [].fill(0, 0, 5);
+  actorList.map(a => {
+    colourCount[a.type] += 1;
+  });
+  let mostPopularCol = colourCount.indexOf(max(colourCount));
+  let leastPopularCol = colourCount.indexOf(min(colourCount));
+  let newBlockedTypes = [];
+  for (let i of colourCount.keys()) {
+    if (i !== leastPopularCol && abs(i + 6 - (leastPopularCol + 6)) > 1)
+      newBlockedTypes.push(i);
+  }
+  let node = new ServerNode(this, mostPopularCol, newBlockedTypes);
+  d
+    .ref("exerciseTwo/nodeList/" + node.id)
+    .set({
+      id: node.id,
+      name: node.name,
+      mainType: node.mainType,
+      blockedTypes: node.blockedTypes
+    })
+    .then(() => location.reload());
+  nodeList.push(node);
+  let points = getSomePointsYall(nodeList.length, 5);
+  for (let [i, x] of nodeList.entries()) {
+    x.s.position = createVector(points[i][0], points[i][1]);
+  }
 }
