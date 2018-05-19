@@ -221,7 +221,7 @@ class ServerNode {
       this.name = p.name;
       if ("blockedTypes" in p) {
         let bt = [];
-        for (let y of p.blockedTypes.values()) bt.push(y);
+        for (let y of Object.values(p.blockedTypes)) bt.push(y);
         this.blockedTypes = bt;
       } else this.blockedTypes = [];
     } else {
