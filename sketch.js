@@ -128,7 +128,9 @@ class Actor {
     if (arguments.length === 2) {
       this.id = arguments[1];
 
-      let p = importedData.actorList.filter(a => this.id === a.id)[0];
+      let p = Object.values(importedData.actorList).filter(
+        a => this.id === a.id
+      )[0];
       Object.assign(this, p);
     } else {
       /** @type {string} */
@@ -211,13 +213,15 @@ class ServerNode {
     if (arguments.length === 2) {
       /** @type {String} */
       this.id = arguments[1];
-      let p = importedData.nodeList.filter(d => {
+      let p = Object.values(importedData.nodeList).filter(d => {
         return this.id === d.id;
       })[0];
       Object.assign(this, p);
+      this.mainType = p.mainType;
+      this.name = p.name;
       if ("blockedTypes" in p) {
         let bt = [];
-        for (let y of p.blockedTypes.vals()) bt.push(y);
+        for (let y of p.blockedTypes.values()) bt.push(y);
         this.blockedTypes = bt;
       } else this.blockedTypes = [];
     } else {
@@ -338,6 +342,7 @@ class ServerNode {
         this.evaluateOn20 = false;
       }
     }
+
     drawSprite(this.s);
     let deltaAng = TWO_PI / max(this.members.length, 1);
     this.rotation += TWO_PI / 600;
@@ -361,9 +366,12 @@ class Message {
     if (arguments.length === 2) {
       this.id = arguments[1];
 
-      let m = importedData.messageList.filter(m => m.id === this.id)[0];
+      let m = Object.values(importedData.messageList).filter(
+        m => m.id === this.id
+      )[0];
 
       Object.assign(this, m);
+      this.added = false;
     } else {
       this.id = hash(
         Number(new Date().getTime() + Math.floor(random() * 200)).toString()
@@ -383,7 +391,7 @@ class Message {
       this.sourceType = 0;
       this.tId = targetId;
       this.targetType = 1;
-      this.added = false;
+      this.added = true;
     }
     /** @type {Sprite} */
 
@@ -473,7 +481,7 @@ class Message {
     drawSprite(this.s);
   }
 }
-let usedHashes = ["000001", "000002", "000003"];
+let usedHashes = ["000001", "000002", "000003", "000004", "000005"];
 // #region global Variables
 let actorList = [];
 
@@ -556,38 +564,6 @@ function postMsg(type) {
 }
 // endregion
 function setup() {
-  d.ref("exerciseTwo").update({
-    usedHashes: ["000001", "000002", "000003"],
-    usedNames: usedNames,
-    nodeList: {
-      "000001": {
-        id: "000001",
-        name: "Metropolis",
-        mainType: 0,
-        blockedTypes: []
-      },
-      "000002": {
-        id: "000002",
-        name: "East Camden",
-        mainType: 1,
-        blockedTypes: [3, 4, 5]
-      },
-      "000003": {
-        id: "000003",
-        name: "West Camden",
-        mainType: 4,
-        blockedTypes: [0, 1, 2]
-      }
-    },
-    actorList: {
-      "000004": {
-        id: "000004",
-        name: "Tom from Myspace",
-        pId: "000001",
-        type: 4
-      }
-    }
-  });
   mode = ACTOR_SELECT;
   console.log(importedData);
   let wh = document.getElementById("canvasContainer");
@@ -597,29 +573,36 @@ function setup() {
   textFont("Ubuntu Mono");
 
   setupAddBox();
-  let noOfNodes = 5;
+  let noOfNodes = Object.keys(importedData.nodeList).length;
+  usedHashes = importedData.usedHashes;
+  usedNames = importedData.usedNames;
+
   let sites = getSomePointsYall(noOfNodes, 5);
-  for (let s of sites) {
-    let sN = new ServerNode(this, 3, [0, 4, 5]);
-    sN.s.position = createVector(...s);
+  let runningCount = 0;
+  for (let [i, n] of Object.entries(importedData.nodeList)) {
+    // @ts-ignore
+    let sN = new ServerNode(this, n.id);
+    sN.s.position = createVector(...sites[runningCount]);
     nodeList.push(sN);
-
-    for (let i of d3.range(floor(random(5)))) {
-      let a = new Actor(this, floor(random(2 + i)), sN.id, "craig");
-
-      actorList.push(a);
-    }
-    d3.range(floor(18)).map(() => {
-      let b = new Message(this, "00000", sN.id, false);
-      b.init();
-      b.sourceType = floor(random(6));
-      b.targetType = b.sourceType;
-      messageList.push(b);
-    });
+    runningCount++;
+  }
+  for (let a of Object.values(importedData.actorList)) {
+    let nA = new Actor(this, a.id);
+    actorList.push(nA);
+  }
+  for (let m of Object.values(importedData.messageList)) {
+    if (m.destroyed === true) continue;
+    if (m.direct === true) continue;
+    let nM = new Message(this, m.id);
+    nM.init();
+    nM.sourceType = m.sourceType;
+    nM.targetType = m.targetType;
+    messageList.push(nM);
   }
 }
 
 function draw() {
+  if (frameCount % 60 === 0) serverNodeAdder();
   background(getC(2, 6).hex);
   if (mode !== SELECT) {
     fill(0, 60);
@@ -977,6 +960,8 @@ function serverNodeAdder() {
     colourCount[a.type] += 1;
   });
   let mostPopularCol = colourCount.indexOf(max(colourCount));
+  mostPopularCol = abs(mostPopularCol);
+  mostPopularCol = mostPopularCol > 6 ? 6 : mostPopularCol;
   let leastPopularCol = colourCount.indexOf(min(colourCount));
   let newBlockedTypes = [];
   for (let i of colourCount.keys()) {
@@ -999,3 +984,37 @@ function serverNodeAdder() {
     x.s.position = createVector(points[i][0], points[i][1]);
   }
 }
+// #region Creation
+/* d.ref("exerciseTwo").update({
+  usedHashes: ["000001", "000002", "000003"],
+  usedNames: usedNames,
+  nodeList: {
+    "000001": {
+      id: "000001",
+      name: "Metropolis",
+      mainType: 0,
+      blockedTypes: []
+    },
+    "000002": {
+      id: "000002",
+      name: "East Camden",
+      mainType: 1,
+      blockedTypes: [3, 4, 5]
+    },
+    "000003": {
+      id: "000003",
+      name: "West Camden",
+      mainType: 4,
+      blockedTypes: [0, 1, 2]
+    }
+  },
+  actorList: {
+    "000004": {
+      id: "000004",
+      name: "Tom from Myspace",
+      pId: "000001",
+      type: 4
+    }
+  }
+}); */
+// #endregion
